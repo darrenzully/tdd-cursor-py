@@ -1,12 +1,16 @@
-# Acá arranca TODO.
-# Los tests definen el diseño.
-
-# Cursor puede generar tests, pero no implementación sin RED.
+from src.domain.permissions import PermissionService, User
 
 
-import pytest
+def test_user_with_active_license_can_execute_action():
+    user = User(id=1, license_active=True)
+    service = PermissionService()
+
+    assert service.can_execute(user, "EXPORT_DATA") is True
 
 
-def test_placeholder():
-    """Test placeholder hasta implementar lógica de permisos."""
-    assert True
+def test_premium_action_requires_premium_license():
+    user = User(id=2, license_active=True, premium=False)
+    service = PermissionService()
+
+    assert service.can_execute(user, "ADVANCED_EXPORT") is False
+
